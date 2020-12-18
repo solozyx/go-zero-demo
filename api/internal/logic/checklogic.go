@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"go-zero-demo/rpc/check/checker"
 
 	"go-zero-demo/api/internal/svc"
 	"go-zero-demo/api/internal/types"
@@ -24,7 +25,17 @@ func NewCheckLogic(ctx context.Context, svcCtx *svc.ServiceContext) CheckLogic {
 }
 
 func (l *CheckLogic) Check(req types.CheckReq) (*types.CheckResp, error) {
-	// todo: add your logic here and delete this line
+	// 手动代码开始
+	resp, err := l.svcCtx.Checker.Check(l.ctx, &checker.CheckReq{
+		Book: req.Book,
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	return &types.CheckResp{}, nil
+	return &types.CheckResp{
+		Found: resp.Found,
+		Price: resp.Price,
+	}, nil
+	// 手动代码结束
 }
